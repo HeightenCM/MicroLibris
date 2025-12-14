@@ -87,19 +87,19 @@ const closeDialog = () => {
   <Dialog
     :visible="visible"
     @update:visible="closeDialog"
-    :header="book ? 'Edit Book' : 'Add New Book'"
+    :header="book ? 'Modifică cartea' : 'Adaugă o carte nouă'"
     :modal="true"
     :style="{ width: '600px' }"
     :closable="!loading"
   >
     <div class="space-y-4">
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Title *</label>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Titlu *</label>
         <InputText v-model="formData.title" class="w-full" :disabled="loading" />
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Author *</label>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Autor *</label>
         <InputText v-model="formData.author" class="w-full" :disabled="loading" />
       </div>
 
@@ -110,7 +110,7 @@ const closeDialog = () => {
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Published Year *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">An publicație *</label>
           <InputNumber
             v-model="formData.publishedYear"
             class="w-full"
@@ -121,11 +121,11 @@ const closeDialog = () => {
       </div>
 
       <div>
-        <label class="block text-sm font-medium text-gray-700 mb-2">Genre *</label>
+        <label class="block text-sm font-medium text-gray-700 mb-2">Categorie *</label>
         <Dropdown
           v-model="formData.genre"
           :options="genres"
-          placeholder="Select a genre"
+          placeholder="Alege o categorie"
           class="w-full"
           :disabled="loading"
         />
@@ -133,12 +133,12 @@ const closeDialog = () => {
 
       <div class="grid grid-cols-2 gap-4">
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Total Copies *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Total exemplare *</label>
           <InputNumber v-model="formData.totalCopies" class="w-full" :min="1" :disabled="loading" />
         </div>
 
         <div>
-          <label class="block text-sm font-medium text-gray-700 mb-2">Available Copies *</label>
+          <label class="block text-sm font-medium text-gray-700 mb-2">Exemplare în stoc *</label>
           <InputNumber
             v-model="formData.availableCopies"
             class="w-full"
@@ -151,9 +151,9 @@ const closeDialog = () => {
     </div>
 
     <template #footer>
-      <Button label="Cancel" @click="closeDialog" text :disabled="loading" />
+      <Button label="Anulează" @click="closeDialog" text :disabled="loading" />
       <Button
-        :label="book ? 'Update' : 'Add'"
+        :label="book ? 'Modifică' : 'Adaugă'"
         @click="saveBook"
         :loading="loading"
         :disabled="!formData.title || !formData.author || !formData.isbn || !formData.genre"

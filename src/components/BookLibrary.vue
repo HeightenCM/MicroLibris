@@ -134,22 +134,30 @@ onMounted(() => {
     <div class="mb-6">
       <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
         <div>
-          <h2 class="text-2xl font-bold text-gray-900">Book Library</h2>
-          <p class="text-gray-600 mt-1">Manage your book collection</p>
+          <h2 class="text-2xl font-bold text-gray-900" style="text-align: center; font-size: 50px">
+            Colecție
+          </h2>
         </div>
-        <Button label="Add Book" icon="pi pi-plus" @click="openNewBookDialog" class="bg-blue-600" />
       </div>
     </div>
 
     <Card class="mb-6">
       <template #content>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4" style="align-items: center">
+          <Button
+            label="Înregistrează o carte"
+            icon="pi pi-plus"
+            @click="openNewBookDialog"
+            class="bg-blue-600"
+            style="margin-right: 20px"
+          />
+          <i class="pi pi-search" />
           <span class="p-input-icon-left w-full">
-            <i class="pi pi-search" />
             <InputText
               v-model="searchQuery"
-              placeholder="Search by title, author, or ISBN"
+              placeholder="Caută după titlu sau autor"
               class="w-full"
+              style="margin-left: 10px"
             />
           </span>
           <Dropdown
@@ -157,9 +165,10 @@ onMounted(() => {
             :options="genres"
             optionLabel="label"
             optionValue="value"
-            placeholder="Filter by Genre"
+            placeholder="Filtrează după categorie"
             :showClear="true"
             class="w-full"
+            style="margin-left: 10px"
           />
         </div>
       </template>
@@ -199,17 +208,20 @@ onMounted(() => {
         <template #content>
           <div class="space-y-3">
             <div class="flex items-center justify-between">
-              <span :class="`px-2 py-1 rounded text-xs font-medium ${getGenreColor(book.genre)}`">
+              <span
+                :class="`px-2 py-1 rounded text-xs font-medium ${getGenreColor(book.genre)}`"
+                style="margin-right: 10px"
+              >
                 {{ book.genre }}
               </span>
               <span :class="`px-2 py-1 rounded text-xs font-medium ${getAvailabilityColor(book)}`">
-                {{ book.availableCopies }}/{{ book.totalCopies }} available
+                {{ book.availableCopies }}/{{ book.totalCopies }} disponibile
               </span>
             </div>
 
             <div class="text-sm text-gray-600">
               <div>ISBN: {{ book.isbn }}</div>
-              <div>Year: {{ book.publishedYear }}</div>
+              <div>An: {{ book.publishedYear }}</div>
             </div>
 
             <div v-if="book.ratings && book.ratings.length > 0" class="flex items-center">
@@ -226,7 +238,7 @@ onMounted(() => {
         <template #footer>
           <div class="flex gap-2">
             <Button
-              label="Details"
+              label="Detalii"
               icon="pi pi-eye"
               @click="openDetailsDialog(book)"
               text
@@ -234,7 +246,7 @@ onMounted(() => {
               class="flex-1"
             />
             <Button
-              label="Edit"
+              label="Editează"
               icon="pi pi-pencil"
               @click="openEditDialog(book)"
               text

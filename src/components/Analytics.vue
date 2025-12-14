@@ -55,8 +55,9 @@ onMounted(() => {
 <template>
   <div>
     <div class="mb-6">
-      <h2 class="text-2xl font-bold text-gray-900">Analytics & Aggregations</h2>
-      <p class="text-gray-600 mt-1">Insights from MongoDB aggregation pipeline</p>
+      <h2 class="text-2xl font-bold text-gray-900" style="text-align: center; font-size: 50px">
+        Statistici
+      </h2>
     </div>
 
     <div v-if="loading" class="flex justify-center items-center py-12">
@@ -67,49 +68,51 @@ onMounted(() => {
       <Card>
         <template #title>
           <div class="flex items-center space-x-2">
-            <i class="pi pi-star-fill text-yellow-500"></i>
-            <span>Most Popular Books (by Borrow Count)</span>
+            <i class="pi pi-star-fill text-yellow-500 icon-heading"></i>
+            <span>Cele mai populare (după împrumuturi)</span>
           </div>
         </template>
         <template #content>
           <div v-if="popularBooks.length > 0">
             <DataTable :value="popularBooks" :rows="10" stripedRows>
-              <Column field="title" header="Title" :sortable="true" />
-              <Column field="author" header="Author" :sortable="true" />
-              <Column field="genre" header="Genre">
+              <Column field="title" header="Titlu" :sortable="true" />
+              <Column field="author" header="Autor" :sortable="true" />
+              <Column field="genre" header="Categorie">
                 <template #body="{ data }">
                   <Tag :value="data.genre" />
                 </template>
               </Column>
-              <Column field="borrowCount" header="Times Borrowed" :sortable="true">
+              <Column field="borrowCount" header="Nr împrumuturi" :sortable="true">
                 <template #body="{ data }">
                   <span class="font-bold text-blue-600">{{ data.borrowCount }}</span>
                 </template>
               </Column>
             </DataTable>
           </div>
-          <div v-else class="text-center py-8 text-gray-500">No borrowing data available yet</div>
+          <div v-else class="text-center py-8 text-gray-500">
+            Nu există date despre împrumuturi încă
+          </div>
         </template>
       </Card>
 
       <Card>
         <template #title>
           <div class="flex items-center space-x-2">
-            <i class="pi pi-heart-fill text-red-500"></i>
-            <span>Top Rated Books</span>
+            <i class="pi pi-heart-fill text-red-500 icon-heading"></i>
+            <span>Cele mai apreciate cărți</span>
           </div>
         </template>
         <template #content>
           <div v-if="ratedBooks.length > 0">
             <DataTable :value="ratedBooks" :rows="10" stripedRows>
-              <Column field="title" header="Title" :sortable="true" />
-              <Column field="author" header="Author" :sortable="true" />
-              <Column field="genre" header="Genre">
+              <Column field="title" header="Titlu" :sortable="true" />
+              <Column field="author" header="Autor" :sortable="true" />
+              <Column field="genre" header="Categorie">
                 <template #body="{ data }">
                   <Tag :value="data.genre" />
                 </template>
               </Column>
-              <Column field="avgRating" header="Avg Rating" :sortable="true">
+              <Column field="avgRating" header="Medie Rating" :sortable="true">
                 <template #body="{ data }">
                   <div class="flex items-center">
                     <Rating
@@ -122,35 +125,35 @@ onMounted(() => {
                   </div>
                 </template>
               </Column>
-              <Column field="ratingCount" header="Reviews" :sortable="true">
+              <Column field="ratingCount" header="Recenzii" :sortable="true">
                 <template #body="{ data }">
                   <span class="text-gray-600">{{ data.ratingCount }}</span>
                 </template>
               </Column>
             </DataTable>
           </div>
-          <div v-else class="text-center py-8 text-gray-500">No ratings available yet</div>
+          <div v-else class="text-center py-8 text-gray-500">Nu există încă recenzii</div>
         </template>
       </Card>
 
       <Card>
         <template #title>
           <div class="flex items-center space-x-2">
-            <i class="pi pi-exclamation-triangle text-orange-500"></i>
-            <span>Low Stock Alert (≤30% Available)</span>
+            <i class="pi pi-exclamation-triangle text-orange-500 icon-heading"></i>
+            <span>Alertă stoc scăzut (≤30% prezent)</span>
           </div>
         </template>
         <template #content>
           <div v-if="lowStockBooks.length > 0">
             <DataTable :value="lowStockBooks" :rows="10" stripedRows>
-              <Column field="title" header="Title" :sortable="true" />
-              <Column field="author" header="Author" :sortable="true" />
-              <Column field="genre" header="Genre">
+              <Column field="title" header="Titlu" :sortable="true" />
+              <Column field="author" header="Autor" :sortable="true" />
+              <Column field="genre" header="Categorie">
                 <template #body="{ data }">
                   <Tag :value="data.genre" />
                 </template>
               </Column>
-              <Column header="Availability">
+              <Column header="Disponibilitate">
                 <template #body="{ data }">
                   <div class="flex items-center">
                     <span class="font-medium"
@@ -167,26 +170,28 @@ onMounted(() => {
               </Column>
             </DataTable>
           </div>
-          <div v-else class="text-center py-8 text-gray-500">All books are well stocked!</div>
+          <div v-else class="text-center py-8 text-gray-500">
+            Toate cărțile sunt bine aprovizionate!
+          </div>
         </template>
       </Card>
 
       <Card>
         <template #title>
           <div class="flex items-center space-x-2">
-            <i class="pi pi-chart-line text-blue-500"></i>
-            <span>Borrowing Trends (Last 12 Months)</span>
+            <i class="pi pi-chart-line text-blue-500 icon-heading"></i>
+            <span>Tendințe împrumuturi (ultimele 12 luni)</span>
           </div>
         </template>
         <template #content>
           <div v-if="trends.length > 0">
             <DataTable :value="trends" stripedRows>
-              <Column header="Period">
+              <Column header="Perioadă">
                 <template #body="{ data }">
                   {{ getMonthName(data._id.month) }} {{ data._id.year }}
                 </template>
               </Column>
-              <Column field="count" header="Books Borrowed">
+              <Column field="count" header="Cărți împrumutate">
                 <template #body="{ data }">
                   <div class="flex items-center">
                     <span class="font-bold text-blue-600 mr-3">{{ data.count }}</span>
@@ -201,10 +206,16 @@ onMounted(() => {
             </DataTable>
           </div>
           <div v-else class="text-center py-8 text-gray-500">
-            No borrowing trends data available yet
+            Nu există tendințe pentru împrumuturi încă
           </div>
         </template>
       </Card>
     </div>
   </div>
 </template>
+
+<style>
+.icon-heading {
+  margin-right: 5px;
+}
+</style>

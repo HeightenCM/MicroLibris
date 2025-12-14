@@ -24,11 +24,6 @@ onMounted(() => {
 
 <template>
   <div>
-    <div class="mb-6">
-      <h2 class="text-2xl font-bold text-gray-900">Dashboard</h2>
-      <p class="text-gray-600 mt-1">Overview of your library statistics</p>
-    </div>
-
     <div v-if="loading" class="flex justify-center items-center py-12">
       <ProgressSpinner />
     </div>
@@ -38,12 +33,9 @@ onMounted(() => {
         <template #content>
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Total Books</p>
+              <p class="text-sm font-medium text-gray-600 detalii">Total cărți</p>
               <p class="text-3xl font-bold text-blue-600 mt-2">{{ stats.totalBooks }}</p>
             </div>
-            <div class="bg-blue-100 rounded-full p-3">
-              <i class="pi pi-book text-2xl text-blue-600"></i>
-            </div>
           </div>
         </template>
       </Card>
@@ -52,12 +44,9 @@ onMounted(() => {
         <template #content>
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Currently Borrowed</p>
+              <p class="text-sm font-medium text-gray-600 detalii">În prezent împrumutate</p>
               <p class="text-3xl font-bold text-orange-600 mt-2">{{ stats.totalBorrowed }}</p>
             </div>
-            <div class="bg-orange-100 rounded-full p-3">
-              <i class="pi pi-users text-2xl text-orange-600"></i>
-            </div>
           </div>
         </template>
       </Card>
@@ -66,15 +55,12 @@ onMounted(() => {
         <template #content>
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Average Rating</p>
+              <p class="text-sm font-medium text-gray-600 detalii">Medie rating</p>
               <p class="text-3xl font-bold text-yellow-600 mt-2">
                 {{ stats.avgRating ? stats.avgRating.toFixed(1) : 'N/A' }}
                 <span class="text-lg text-gray-500">/5</span>
               </p>
             </div>
-            <div class="bg-yellow-100 rounded-full p-3">
-              <i class="pi pi-star text-2xl text-yellow-600"></i>
-            </div>
           </div>
         </template>
       </Card>
@@ -83,11 +69,8 @@ onMounted(() => {
         <template #content>
           <div class="flex items-center justify-between">
             <div>
-              <p class="text-sm font-medium text-gray-600">Genres</p>
+              <p class="text-sm font-medium text-gray-600 detalii">Categorii</p>
               <p class="text-3xl font-bold text-green-600 mt-2">{{ stats.byGenre.length }}</p>
-            </div>
-            <div class="bg-green-100 rounded-full p-3">
-              <i class="pi pi-tags text-2xl text-green-600"></i>
             </div>
           </div>
         </template>
@@ -96,9 +79,8 @@ onMounted(() => {
 
     <Card v-if="stats && stats.byGenre.length > 0" class="mt-6">
       <template #title>
-        <div class="flex items-center space-x-2">
-          <i class="pi pi-chart-pie text-blue-600"></i>
-          <span>Books by Genre</span>
+        <div class="flex items-center space-x-2 detalii">
+          <span>Cărți după categorie</span>
         </div>
       </template>
       <template #content>
@@ -116,3 +98,10 @@ onMounted(() => {
     </Card>
   </div>
 </template>
+
+<style>
+.detalii {
+  font-weight: bold;
+  font-size: x-large;
+}
+</style>

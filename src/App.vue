@@ -8,8 +8,8 @@ const activeTab = ref(0)
 
 const tabs = [
   { label: 'Dashboard', icon: 'pi pi-home' },
-  { label: 'Library', icon: 'pi pi-book' },
-  { label: 'Analytics', icon: 'pi pi-chart-bar' },
+  { label: 'Colecție', icon: 'pi pi-book' },
+  { label: 'Statistici', icon: 'pi pi-chart-bar' },
 ]
 
 function toggleDarkMode() {
@@ -18,16 +18,15 @@ function toggleDarkMode() {
 </script>
 
 <template>
-  <Button label="Toggle Dark Mode" @click="toggleDarkMode()" />
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm border-b">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">
         <div class="flex items-center justify-between">
-          <div class="flex items-center space-x-3">
-            <i class="pi pi-book text-3xl text-blue-600"></i>
+          <div class="flex items-center space-x-3" style="text-align: center">
             <h1 class="text-2xl font-bold text-gray-900">MicroLibris</h1>
+            <p class="text-sm text-gray-500">Proiect BD NoSQL</p>
           </div>
-          <p class="text-sm text-gray-500">A small library management system project</p>
+          <Button label="Schimbare tematică" @click="toggleDarkMode()" />
         </div>
       </div>
     </header>

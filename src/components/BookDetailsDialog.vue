@@ -51,8 +51,8 @@ const borrowBook = async () => {
   if (!borrowerName.value.trim()) {
     toast.add({
       severity: 'warn',
-      summary: 'Required',
-      detail: 'Please enter borrower name',
+      summary: 'Necesar',
+      detail: 'Te rog introdu numele împrumutorului',
       life: 3000,
     })
     return
@@ -63,15 +63,20 @@ const borrowBook = async () => {
     await bookService.borrowBook(props.book._id, borrowerName.value)
     toast.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Book borrowed successfully',
+      summary: 'Succes',
+      detail: 'Carte împrumutată cu succes',
       life: 3000,
     })
     borrowerName.value = ''
     emit('updated')
     emit('update:visible', false)
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to borrow book', life: 3000 })
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'Nu s-a putut împrumuta cartea',
+      life: 3000,
+    })
   } finally {
     loading.value = false
   }
@@ -83,13 +88,18 @@ const returnBook = async (borrowerName) => {
     await bookService.returnBook(props.book._id, borrowerName)
     toast.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Book returned successfully',
+      summary: 'Succes',
+      detail: 'Carte returnată cu succes',
       life: 3000,
     })
     emit('updated')
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to return book', life: 3000 })
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'Nu s-a putut returna cartea',
+      life: 3000,
+    })
   } finally {
     loading.value = false
   }
@@ -99,8 +109,8 @@ const addRating = async () => {
   if (rating.value === 0) {
     toast.add({
       severity: 'warn',
-      summary: 'Required',
-      detail: 'Please select a rating',
+      summary: 'Necesar',
+      detail: 'Te rog alege un rating',
       life: 3000,
     })
     return
@@ -111,15 +121,20 @@ const addRating = async () => {
     await bookService.addRating(props.book._id, rating.value, review.value)
     toast.add({
       severity: 'success',
-      summary: 'Success',
-      detail: 'Rating added successfully',
+      summary: 'Succes',
+      detail: 'Rating adăugat cu succes',
       life: 3000,
     })
     rating.value = 0
     review.value = ''
     emit('updated')
   } catch (error) {
-    toast.add({ severity: 'error', summary: 'Error', detail: 'Failed to add rating', life: 3000 })
+    toast.add({
+      severity: 'error',
+      summary: 'Eroare',
+      detail: 'Nu s-a putut adăuga un rating',
+      life: 3000,
+    })
   } finally {
     loading.value = false
   }
@@ -148,31 +163,31 @@ const closeDialog = () => {
   >
     <div v-if="book">
       <TabView v-model:activeIndex="activeTab">
-        <TabPanel header="Details">
+        <TabPanel header="Detalii">
           <div class="space-y-4">
             <div class="grid grid-cols-2 gap-4">
               <div>
-                <p class="text-sm font-medium text-gray-600">Author</p>
+                <p class="text-sm font-medium text-gray-600 detalii">Autor</p>
                 <p class="text-gray-900">{{ book.author }}</p>
               </div>
               <div>
-                <p class="text-sm font-medium text-gray-600">Genre</p>
+                <p class="text-sm font-medium text-gray-600 detalii">Categorie</p>
                 <p class="text-gray-900">{{ book.genre }}</p>
               </div>
               <div>
-                <p class="text-sm font-medium text-gray-600">ISBN</p>
+                <p class="text-sm font-medium text-gray-600 detalii">ISBN</p>
                 <p class="text-gray-900">{{ book.isbn }}</p>
               </div>
               <div>
-                <p class="text-sm font-medium text-gray-600">Published Year</p>
+                <p class="text-sm font-medium text-gray-600 detalii">An publicație</p>
                 <p class="text-gray-900">{{ book.publishedYear }}</p>
               </div>
               <div>
-                <p class="text-sm font-medium text-gray-600">Total Copies</p>
+                <p class="text-sm font-medium text-gray-600 detalii">Total exemplare</p>
                 <p class="text-gray-900">{{ book.totalCopies }}</p>
               </div>
               <div>
-                <p class="text-sm font-medium text-gray-600">Available Copies</p>
+                <p class="text-sm font-medium text-gray-600 detalii">Exemplare în stoc</p>
                 <p
                   class="text-gray-900 font-bold"
                   :class="book.availableCopies > 0 ? 'text-green-600' : 'text-red-600'"
@@ -185,11 +200,11 @@ const closeDialog = () => {
             <Divider />
 
             <div v-if="book.ratings && book.ratings.length > 0">
-              <p class="text-sm font-medium text-gray-600 mb-2">Average Rating</p>
+              <p class="text-sm font-medium text-gray-600 mb-2">Rating Mediu</p>
               <div class="flex items-center">
                 <span class="text-3xl font-bold text-gray-900 mr-3">{{ avgRating }}</span>
                 <Rating :modelValue="parseFloat(avgRating)" :readonly="true" :cancel="false" />
-                <span class="text-gray-500 ml-2">({{ book.ratings.length }} reviews)</span>
+                <span class="text-gray-500 ml-2">({{ book.ratings.length }} recenzii)</span>
               </div>
             </div>
           </div>
@@ -198,26 +213,27 @@ const closeDialog = () => {
         <TabPanel header="Borrow">
           <div class="space-y-4">
             <div v-if="book.availableCopies > 0">
-              <label class="block text-sm font-medium text-gray-700 mb-2">Borrower Name</label>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Împrumutor</label>
               <div class="flex gap-2">
                 <InputText
                   v-model="borrowerName"
                   placeholder="Enter name"
                   class="flex-1"
                   :disabled="loading"
+                  style="margin-right: 10px"
                 />
-                <Button label="Borrow" icon="pi pi-check" @click="borrowBook" :loading="loading" />
+                <Button label="Împrumută" icon="pi pi-check" @click="borrowBook" :loading="loading" />
               </div>
             </div>
             <div v-else class="text-center py-8">
               <i class="pi pi-ban text-4xl text-red-500 mb-2"></i>
-              <p class="text-gray-600">No copies available for borrowing</p>
+              <p class="text-gray-600">Niciun exemplar prezent pentru a fi împrumutat</p>
             </div>
 
             <Divider />
 
             <div v-if="activeBorrows.length > 0">
-              <h4 class="font-medium text-gray-900 mb-3">Currently Borrowed By:</h4>
+              <h4 class="font-medium text-gray-900 mb-3">În prezent împrumutată de:</h4>
               <div class="space-y-2">
                 <div
                   v-for="(borrow, index) in activeBorrows"
@@ -227,11 +243,11 @@ const closeDialog = () => {
                   <div>
                     <p class="font-medium text-gray-900">{{ borrow.borrowerName }}</p>
                     <p class="text-sm text-gray-500">
-                      Borrowed: {{ formatDate(borrow.borrowDate) }}
+                      Împrumutată la: {{ formatDate(borrow.borrowDate) }}
                     </p>
                   </div>
                   <Button
-                    label="Return"
+                    label="Returnează"
                     icon="pi pi-undo"
                     @click="returnBook(borrow.borrowerName)"
                     size="small"
@@ -244,16 +260,16 @@ const closeDialog = () => {
           </div>
         </TabPanel>
 
-        <TabPanel header="History">
+        <TabPanel header="Istoric">
           <div v-if="borrowHistory.length > 0">
             <DataTable :value="borrowHistory" :paginator="true" :rows="5">
-              <Column field="borrowerName" header="Borrower" />
-              <Column header="Borrowed Date">
+              <Column field="borrowerName" header="Împrumutor" />
+              <Column header="Dată împrumut">
                 <template #body="{ data }">
                   {{ formatDate(data.borrowDate) }}
                 </template>
               </Column>
-              <Column header="Returned Date">
+              <Column header="Dată return">
                 <template #body="{ data }">
                   {{ data.returnDate ? formatDate(data.returnDate) : '-' }}
                 </template>
@@ -270,34 +286,40 @@ const closeDialog = () => {
           </div>
           <div v-else class="text-center py-8">
             <i class="pi pi-history text-4xl text-gray-300 mb-2"></i>
-            <p class="text-gray-500">No borrow history yet</p>
+            <p class="text-gray-500">Niciun istoric de împrumut încă</p>
           </div>
         </TabPanel>
 
-        <!-- Ratings Tab -->
-        <TabPanel header="Ratings">
+        <TabPanel header="Recenzii">
           <div class="space-y-4">
             <Card>
               <template #content>
                 <div class="space-y-3">
                   <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Your Rating</label>
-                    <Rating v-model="rating" :cancel="false" :disabled="loading" />
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Părerea ta</label>
+                    <Rating
+                      v-model="rating"
+                      :cancel="false"
+                      :disabled="loading"
+                      style="margin-left: 10px"
+                    />
                   </div>
                   <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2"
-                      >Review (Optional)</label
+                      >Detalii (Opțional)</label
                     >
+                    <br></br>
                     <Textarea
                       v-model="review"
                       rows="3"
                       class="w-full"
-                      placeholder="Write your review..."
+                      placeholder="Scrie-ți părerea..."
                       :disabled="loading"
+                      style="margin: 10px"
                     />
                   </div>
                   <Button
-                    label="Submit Rating"
+                    label="Trimite recenzie"
                     icon="pi pi-star"
                     @click="addRating"
                     class="w-full"
@@ -310,7 +332,7 @@ const closeDialog = () => {
             <Divider />
 
             <div v-if="book.ratings && book.ratings.length > 0">
-              <h4 class="font-medium text-gray-900 mb-3">All Reviews</h4>
+              <h4 class="font-medium text-gray-900 mb-3">Toate recenziile</h4>
               <div class="space-y-3">
                 <Card v-for="(r, index) in book.ratings" :key="index">
                   <template #content>
@@ -332,7 +354,7 @@ const closeDialog = () => {
             </div>
             <div v-else class="text-center py-8">
               <i class="pi pi-star text-4xl text-gray-300 mb-2"></i>
-              <p class="text-gray-500">No ratings yet</p>
+              <p class="text-gray-500">Nicio recenzie încă</p>
             </div>
           </div>
         </TabPanel>
@@ -342,3 +364,10 @@ const closeDialog = () => {
     <Toast />
   </Dialog>
 </template>
+
+<style>
+  .detalii{
+    font-weight: bold;
+    font-size: x-large;
+  }
+</style>

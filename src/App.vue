@@ -11,9 +11,14 @@ const tabs = [
   { label: 'Library', icon: 'pi pi-book' },
   { label: 'Analytics', icon: 'pi pi-chart-bar' },
 ]
+
+function toggleDarkMode() {
+  document.documentElement.classList.toggle('my-app-dark')
+}
 </script>
 
 <template>
+  <Button label="Toggle Dark Mode" @click="toggleDarkMode()" />
   <div class="min-h-screen bg-gray-50">
     <header class="bg-white shadow-sm border-b">
       <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-4">

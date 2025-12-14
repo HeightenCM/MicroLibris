@@ -33,6 +33,9 @@ const app = createApp(App)
 app.use(PrimeVue, {
   theme: {
     preset: Aura,
+    options: {
+      darkModeSelector: '.my-app-dark',
+    },
   },
 })
 

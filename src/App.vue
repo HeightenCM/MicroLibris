@@ -22,7 +22,7 @@ const tabs = [
             <i class="pi pi-book text-3xl text-blue-600"></i>
             <h1 class="text-2xl font-bold text-gray-900">MicroLibris</h1>
           </div>
-          <p class="text-sm text-gray-500">MongoDB Library Management System</p>
+          <p class="text-sm text-gray-500">A small library management system project</p>
         </div>
       </div>
     </header>

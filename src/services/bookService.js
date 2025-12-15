@@ -3,6 +3,7 @@ import axios from 'axios'
 const API_URL = 'http://localhost:8080/api/books'
 
 export const bookService = {
+  // CRUD Operations
   getAllBooks() {
     return axios.get(API_URL)
   },
@@ -23,6 +24,7 @@ export const bookService = {
     return axios.delete(`${API_URL}/${id}`)
   },
 
+  // Book Operations
   borrowBook(id, borrowerName) {
     return axios.post(`${API_URL}/${id}/borrow`, { borrowerName })
   },
@@ -35,6 +37,7 @@ export const bookService = {
     return axios.post(`${API_URL}/${id}/rating`, { rating, review })
   },
 
+  // Aggregation/Statistics
   getDashboardStats() {
     return axios.get(`${API_URL}/stats/dashboard`)
   },
@@ -53,5 +56,13 @@ export const bookService = {
 
   getBorrowingTrends() {
     return axios.get(`${API_URL}/stats/trends`)
+  },
+
+  getAuthorStats() {
+    return axios.get(`${API_URL}/stats/authors`)
+  },
+
+  getBorrowerStats() {
+    return axios.get(`${API_URL}/stats/borrowers`)
   },
 }

@@ -25,11 +25,6 @@ onMounted(() => {
 
 <template>
   <div class="dashboard-container">
-    <div class="dashboard-header">
-      <h2 class="dashboard-title">Dashboard</h2>
-      <p class="dashboard-subtitle">Prezentare generală a statisticilor bibliotecii</p>
-    </div>
-
     <div v-if="loading" class="loading-container">
       <ProgressSpinner />
     </div>

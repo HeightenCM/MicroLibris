@@ -210,14 +210,14 @@ const closeDialog = () => {
           </div>
         </TabPanel>
 
-        <TabPanel header="Borrow">
+        <TabPanel header="Împrumută">
           <div class="space-y-4">
             <div v-if="book.availableCopies > 0">
               <label class="block text-sm font-medium text-gray-700 mb-2">Împrumutor</label>
               <div class="flex gap-2">
                 <InputText
                   v-model="borrowerName"
-                  placeholder="Enter name"
+                  placeholder="Scrie un nume"
                   class="flex-1"
                   :disabled="loading"
                   style="margin-right: 10px"

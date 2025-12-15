@@ -114,11 +114,6 @@ onMounted(() => {
 
 <template>
   <div class="analytics-container">
-    <div class="analytics-header">
-      <h2 class="analytics-title">Analiză & Agregări</h2>
-      <p class="analytics-subtitle">Perspective detaliate din MongoDB Aggregation Pipeline</p>
-    </div>
-
     <div v-if="loading" class="loading-container">
       <ProgressSpinner />
     </div>

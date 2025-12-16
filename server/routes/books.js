@@ -4,10 +4,8 @@ import { getDb } from '../config/db.js'
 
 const router = express.Router()
 
-// Helper function to get books collection
 const getCollection = () => getDb().collection('books')
 
-// CREATE - Add a new book
 router.post('/', async (req, res) => {
   try {
     const book = {
@@ -27,7 +25,6 @@ router.post('/', async (req, res) => {
   }
 })
 
-// READ - Get all books
 router.get('/', async (req, res) => {
   try {
     const books = await getCollection().find().toArray()
@@ -37,7 +34,6 @@ router.get('/', async (req, res) => {
   }
 })
 
-// READ - Get book by ID
 router.get('/:id', async (req, res) => {
   try {
     const book = await getCollection().findOne({
@@ -54,7 +50,6 @@ router.get('/:id', async (req, res) => {
   }
 })
 
-// UPDATE - Update book details
 router.put('/:id', async (req, res) => {
   try {
     const { _id, ...updateData } = req.body
@@ -74,7 +69,6 @@ router.put('/:id', async (req, res) => {
   }
 })
 
-// DELETE - Remove a book
 router.delete('/:id', async (req, res) => {
   try {
     const result = await getCollection().deleteOne({
@@ -91,7 +85,6 @@ router.delete('/:id', async (req, res) => {
   }
 })
 
-// UPDATE - Borrow a book
 router.post('/:id/borrow', async (req, res) => {
   try {
     const { borrowerName } = req.body
@@ -121,12 +114,10 @@ router.post('/:id/borrow', async (req, res) => {
   }
 })
 
-// UPDATE - Return a book
 router.post('/:id/return', async (req, res) => {
   try {
     const { borrowerName } = req.body
 
-    // Find the book and the specific borrow record
     const book = await getCollection().findOne({
       _id: new ObjectId(req.params.id),
     })
@@ -135,7 +126,6 @@ router.post('/:id/return', async (req, res) => {
       return res.status(404).json({ error: 'Book not found' })
     }
 
-    // Find the active borrow record for this borrower
     const borrowIndex = book.borrowHistory.findIndex(
       (b) => b.borrowerName === borrowerName && b.status === 'borrowed',
     )
@@ -144,7 +134,6 @@ router.post('/:id/return', async (req, res) => {
       return res.status(400).json({ error: 'No active borrow record found' })
     }
 
-    // Update the specific borrow record
     const updateField = `borrowHistory.${borrowIndex}`
     await getCollection().updateOne(
       { _id: new ObjectId(req.params.id) },
@@ -163,7 +152,6 @@ router.post('/:id/return', async (req, res) => {
   }
 })
 
-// UPDATE - Add a rating/review
 router.post('/:id/rating', async (req, res) => {
   try {
     const { rating, review } = req.body
@@ -189,24 +177,19 @@ router.post('/:id/rating', async (req, res) => {
   }
 })
 
-// AGGREGATION - Get statistics
-// Demonstrates: $facet, $count, $match, $expr, $group, $avg, $unwind, $sum, $cond
 router.get('/stats/dashboard', async (req, res) => {
   try {
     const stats = await getCollection()
       .aggregate([
         {
           $facet: {
-            // Simple count of all books
             totalBooks: [{ $count: 'count' }],
 
-            // Count books that have at least one copy borrowed
             totalBorrowed: [
               { $match: { $expr: { $lt: ['$availableCopies', '$totalCopies'] } } },
               { $count: 'count' },
             ],
 
-            // Group by genre with total books and total copies per genre
             byGenre: [
               {
                 $group: {
@@ -238,7 +221,6 @@ router.get('/stats/dashboard', async (req, res) => {
               },
             ],
 
-            // Calculate average rating across all books
             avgRating: [
               { $unwind: '$ratings' },
               {
@@ -250,10 +232,8 @@ router.get('/stats/dashboard', async (req, res) => {
               },
             ],
 
-            // Calculate total circulation (all borrows)
             totalCirculation: [{ $unwind: '$borrowHistory' }, { $count: 'count' }],
 
-            // Books added this year
             recentAdditions: [
               {
                 $match: {
@@ -265,7 +245,6 @@ router.get('/stats/dashboard', async (req, res) => {
               { $count: 'count' },
             ],
 
-            // Active borrowers (currently have books)
             activeBorrowers: [
               { $unwind: '$borrowHistory' },
               { $match: { 'borrowHistory.status': 'borrowed' } },
@@ -294,8 +273,6 @@ router.get('/stats/dashboard', async (req, res) => {
   }
 })
 
-// AGGREGATION - Most popular books (by borrow count)
-// Demonstrates: $addFields, $size, $filter, $match, $sort, $limit, $project, $cond
 router.get('/stats/popular', async (req, res) => {
   try {
     const popularBooks = await getCollection()
@@ -352,8 +329,6 @@ router.get('/stats/popular', async (req, res) => {
   }
 })
 
-// AGGREGATION - Books with average ratings
-// Demonstrates: $match, $addFields, $avg, $size, $sort, $project, bucket by rating
 router.get('/stats/ratings', async (req, res) => {
   try {
     const booksWithRatings = await getCollection()
@@ -442,8 +417,6 @@ router.get('/stats/ratings', async (req, res) => {
   }
 })
 
-// AGGREGATION - Books with low availability
-// Demonstrates: $match with $expr, $and, $multiply, $addFields, $divide, $sort
 router.get('/stats/low-stock', async (req, res) => {
   try {
     const lowStockBooks = await getCollection()
@@ -511,8 +484,6 @@ router.get('/stats/low-stock', async (req, res) => {
   }
 })
 
-// AGGREGATION - Borrowing trends by month
-// Demonstrates: $unwind, $group with date operators, $sort, $limit, $project with calculated fields
 router.get('/stats/trends', async (req, res) => {
   try {
     const trends = await getCollection()
@@ -587,8 +558,6 @@ router.get('/stats/trends', async (req, res) => {
   }
 })
 
-// AGGREGATION - Author statistics
-// Demonstrates: $group by author, $push, $avg, complex aggregations
 router.get('/stats/authors', async (req, res) => {
   try {
     const authorStats = await getCollection()
@@ -659,8 +628,6 @@ router.get('/stats/authors', async (req, res) => {
   }
 })
 
-// AGGREGATION - Borrower analytics
-// Demonstrates: $unwind, $match, $group, $lookup-like behavior with arrays
 router.get('/stats/borrowers', async (req, res) => {
   try {
     const borrowerStats = await getCollection()
